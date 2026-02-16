@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Common.Helpers
 {
     public enum COLORS
-    {        
+    {
         Red,
         Green,
         Blue,
@@ -21,14 +21,14 @@ namespace Common.Helpers
 
     public static class ColorHelper
     {
-        
+
         public static Color Red => Color.red;
         public static Color Green => Color.green;
         public static Color Blue => Color.blue;
         public static Color Yellow => Color.yellow;
         public static Color White => Color.white;
         public static Color Magenta => Color.magenta;
-        public static Color Cyan => Color.cyan;        
+        public static Color Cyan => Color.cyan;
         public static Color Orange => new Color32(byte.MaxValue, 146, 71, byte.MaxValue);
         public static Color Lime => new Color(0.749f, 1f, 0f, 1f);
         public static Color Amethyst => new Color(0.6f, 0.4f, 0.8f, 1f);

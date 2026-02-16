@@ -7,7 +7,6 @@ using UnityEngine;
 using Common.ConfigurationParser;
 using Common;
 using Common.Helpers;
-using BepInEx.Bootstrap;
 
 namespace SlotExtender.Configuration
 {
@@ -15,7 +14,7 @@ namespace SlotExtender.Configuration
     {
         public static string PROGRAM_VERSION = string.Empty;
         public static string CONFIG_VERSION = string.Empty;
-        
+
         private static readonly string modFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private static readonly string FILENAME = $"{modFolder}/config.txt";
 
@@ -47,7 +46,7 @@ namespace SlotExtender.Configuration
             SlotConfigID.SeamothArmLeft.ToString(),
             SlotConfigID.SeamothArmRight.ToString()
         };
-        
+
         private static readonly string[] SECTIONKEYS_SETTINGS =
         {
             "MaxSlots",
@@ -80,11 +79,11 @@ namespace SlotExtender.Configuration
             SLOTKEYBINDINGS.Clear();
             SLOTKEYSLIST.Clear();
 
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_1, GameInput.GetBindingName(GameInput.Button.Slot1, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_2, GameInput.GetBindingName(GameInput.Button.Slot2, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_3, GameInput.GetBindingName(GameInput.Button.Slot3, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_4, GameInput.GetBindingName(GameInput.Button.Slot4, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_5, GameInput.GetBindingName(GameInput.Button.Slot5, GameInput.BindingSet.Primary));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_1, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot1, GameInput.BindingSet.Primary));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_2, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot2, GameInput.BindingSet.Primary));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_3, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot3, GameInput.BindingSet.Primary));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_4, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot4, GameInput.BindingSet.Primary));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_5, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot5, GameInput.BindingSet.Primary));
             SLOTKEYBINDINGS.Add(SlotConfigID.Slot_6, Section_Hotkeys[SlotConfigID.Slot_6.ToString()]);
             SLOTKEYBINDINGS.Add(SlotConfigID.Slot_7, Section_Hotkeys[SlotConfigID.Slot_7.ToString()]);
             SLOTKEYBINDINGS.Add(SlotConfigID.Slot_8, Section_Hotkeys[SlotConfigID.Slot_8.ToString()]);
@@ -98,19 +97,19 @@ namespace SlotExtender.Configuration
             foreach (KeyValuePair<SlotConfigID, string> kvp in SLOTKEYBINDINGS)
             {
                 SLOTKEYSLIST.Add(kvp.Value);
-            }            
+            }
         }
 
         internal static void Load()
         {
-            PROGRAM_VERSION = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+            PROGRAM_VERSION = "1.0.0"; // FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
             if (!Check())
             {
                 CreateDefault();
             }
 
-            Section_Settings = ParserHelper.GetAllKeyValuesFromSection(FILENAME, "Settings", SECTIONKEYS_SETTINGS);                        
+            Section_Settings = ParserHelper.GetAllKeyValuesFromSection(FILENAME, "Settings", SECTIONKEYS_SETTINGS);
             Section_Hotkeys = ParserHelper.GetAllKeyValuesFromSection(FILENAME, "Hotkeys", SECTIONKEYS_HOTKEYS);
 
             int.TryParse(Section_Settings["MaxSlots"], out int maxslots);
@@ -120,27 +119,27 @@ namespace SlotExtender.Configuration
             TEXTCOLOR = ColorHelper.GetColor(Section_Settings["TextColor"]);
 
             int.TryParse(Section_Settings["SeamothStorageSlotsOffset"], out int slotOffset);
-            STORAGE_SLOTS_OFFSET = slotOffset < 3 ? 0 : slotOffset > 8 ? 8 : slotOffset;              
+            STORAGE_SLOTS_OFFSET = slotOffset < 3 ? 0 : slotOffset > 8 ? 8 : slotOffset;
 
-            SLOT_LAYOUT = Section_Settings["SlotLayout"] == "Circle"? SlotLayout.Circle : SlotLayout.Grid;
+            SLOT_LAYOUT = Section_Settings["SlotLayout"] == "Circle" ? SlotLayout.Circle : SlotLayout.Grid;
 
             isSeamothArmsExists = true;
 
-            SNLogger.Log("Configuration loaded.");            
+            SNLogger.Log("Configuration loaded.");
         }
 
         internal static void CreateDefault()
         {
             SNLogger.Warn("Configuration file is missing or wrong version. Trying to create a new one.");
-            
+
             ParserHelper.CreateDefaultConfigFile(FILENAME, "SlotExtender", PROGRAM_VERSION, DEFAULT_CONFIG);
 
             ParserHelper.AddInfoText(FILENAME, "MaxSlots possible values", "5 to 12");
             ParserHelper.AddInfoText(FILENAME, "TextColor possible values", "Red, Green, Blue, Yellow, White, Magenta, Cyan, Orange, Lime, Amethyst, LightBlue");
             ParserHelper.AddInfoText(FILENAME, "SeamothStorageSlotsOffset possible values", "0 to 8");
-            ParserHelper.AddInfoText(FILENAME, "SlotLayout possible values", "Grid, Circle");                
+            ParserHelper.AddInfoText(FILENAME, "SlotLayout possible values", "Grid, Circle");
 
-            SNLogger.Log("The new configuration file was successfully created.");            
+            SNLogger.Log("The new configuration file was successfully created.");
         }
 
         internal static void Init()
@@ -184,7 +183,7 @@ namespace SlotExtender.Configuration
                 SNLogger.Debug($"key: {kvp.Key.ToString()}, Value: {kvp.Value}");
 
                 string key = kvp.Key.ToString();
-                
+
                 if (Section_Hotkeys.ContainsKey(key))
                     Section_Hotkeys[key] = kvp.Value;
 
@@ -204,7 +203,7 @@ namespace SlotExtender.Configuration
             foreach (KeyValuePair<string, string> kvp in Section_Hotkeys)
             {
                 try
-                {                    
+                {
                     KEYBINDINGS.Add(kvp.Key, InputHelper.GetInputNameAsKeyCode(kvp.Value));
                 }
                 catch (ArgumentException)

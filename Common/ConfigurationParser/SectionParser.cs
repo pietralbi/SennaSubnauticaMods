@@ -2,14 +2,13 @@
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
-#pragma warning disable CS1591
 
 namespace Common.ConfigurationParser
 {
     public class SectionParser
     {
         private FileReader _reader;
-        private static readonly Regex SectionPattern = new Regex(@"^\[(.*)\]$");        
+        private static readonly Regex SectionPattern = new Regex(@"^\[(.*)\]$");
         private static readonly Regex PairPattern = new Regex(@"^([\S][^:]+)[\s]*:[\s]*(.*)$");
         private static readonly Regex ContinuationPattern = new Regex(@"^[\s]+[\S]+");
 

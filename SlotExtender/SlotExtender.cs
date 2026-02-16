@@ -2,18 +2,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using HarmonyLib;
-using SMLHelper.V2.Handlers;
 using Common;
 using SlotExtender.Configuration;
+using Nautilus.Options;
 using BepInEx;
 using BepInEx.Logging;
 using System.IO;
+using Nautilus.Handlers;
 
 namespace SlotExtender
 {
     [BepInPlugin(GUID, MODNAME, VERSION)]
     [BepInProcess("Subnautica.exe")]
-    [BepInDependency("com.ahk1221.smlhelper", BepInDependency.DependencyFlags.HardDependency)]
     internal class SlotExtender : BaseUnityPlugin
     {
         private const string GUID = "com.senna.slotextender";
@@ -24,30 +24,31 @@ namespace SlotExtender
         internal SlotExtender mInstance;
         internal Harmony hInstance;
 
+        public static SEOptions Options { get; } = OptionsPanelHandler.RegisterModOptions<SEOptions>();
+
         internal void Awake()
         {
             mInstance = this;
             BepinLogger = BepInEx.Logging.Logger.CreateLogSource(MODNAME);
             BepinLogger.LogInfo("Awake");
 
-            SEConfig.Load();            
+            SEConfig.Load();
             SlotHelper.InitSlotIDs();
             SlotHelper.ExpandSlotMapping();
-            OptionsPanelHandler.RegisterModOptions(new SEOptions());
 
             hInstance = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), GUID);
 
             SNLogger.Debug($"Harmony Instance created, Name = [{hInstance.Id}]");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
-            
-            IngameMenuHandler.Main.RegisterOnQuitEvent(OnQuitEvent);
-        }        
+
+            // IngameMenuHandler.Main.RegisterOnQuitEvent(OnQuitEvent);
+        }
 
         private static void OnQuitEvent()
         {
             Main.uGUI_PrefixComplete = false;
-            Main.uGUI_PostfixComplete = false;            
+            Main.uGUI_PostfixComplete = false;
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -55,7 +56,7 @@ namespace SlotExtender
             if (scene.name == "XMenu")
             {
                 // enabling game console
-                PlatformUtils.SetDevToolsEnabled(true);                
+                PlatformUtils.SetDevToolsEnabled(true);
 
                 // init config
                 SEConfig.Init();
@@ -68,9 +69,9 @@ namespace SlotExtender
             if (scene.name == "Main")
             {
                 // creating a console input field listener to skip SlotExdender Update method key events conflict while console is active in game
-                Main.ListenerInstance = InitializeListener();                
+                Main.ListenerInstance = InitializeListener();
             }
-        }        
+        }
 
         internal static InputFieldListener InitializeListener()
         {
@@ -86,7 +87,7 @@ namespace SlotExtender
             }
 
             return Main.ListenerInstance;
-        }        
+        }
     }
 
     internal static class Main
@@ -101,7 +102,7 @@ namespace SlotExtender
         internal static bool uGUI_PostfixComplete = false;
         internal static readonly string modFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-        internal static Atlas.Sprite atlasSpriteExosuitArm = null;
+        internal static Sprite atlasSpriteExosuitArm = null;
 
         internal static void GameInput_OnBindingsChanged()
         {
