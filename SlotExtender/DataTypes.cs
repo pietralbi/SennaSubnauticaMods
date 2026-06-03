@@ -83,21 +83,6 @@ namespace SlotExtender
         SeamothModule12,
         SeamothArmLeft,
         SeamothArmRight,
-
-        CyclopsModule1,
-        CyclopsModule2,
-        CyclopsModule3,
-        CyclopsModule4,
-        CyclopsModule5,
-        CyclopsModule6,
-        CyclopsModule7,
-        CyclopsModule8,
-        CyclopsModule9,
-        CyclopsModule10,
-        CyclopsModule11,
-        CyclopsModule12,
-        CyclopsModule13,
-        CyclopsModule14,
     };
 
     public class SlotData

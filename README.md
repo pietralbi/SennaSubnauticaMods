@@ -1,6 +1,6 @@
 # Slot Extender
 
-Slot Extender is a Subnautica BepInEx plugin that adds configurable extra vehicle upgrade slots for the Seamoth, Exosuit, and Cyclops.
+Slot Extender is a Subnautica BepInEx plugin that adds configurable extra vehicle upgrade slots for the Seamoth and Exosuit.
 
 ## Build
 

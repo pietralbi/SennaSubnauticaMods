@@ -10,7 +10,6 @@ namespace SlotExtender
     {
         public static string[] SessionSeamothSlotIDs { get; private set; }
         public static string[] SessionExosuitSlotIDs { get; private set; }
-        public static string[] SessionCyclopsSlotIDs { get; private set; }
         public static string[] NewChipSlotIDs { get; private set; }
 
         public static SlotPosLayout SessionSlotPosLayout = SEConfig.SLOT_LAYOUT == SlotLayout.Grid ? new SlotPosGrid() : (SlotPosLayout)new SlotPosCircle();
@@ -63,21 +62,6 @@ namespace SlotExtender
             { SlotName.SeamothModule12, "SeamothModule12" },
             { SlotName.SeamothArmLeft,  "SeamothArmLeft"  },
             { SlotName.SeamothArmRight, "SeamothArmRight" },
-
-            { SlotName.CyclopsModule1,  "CyclopsModule1"  },
-            { SlotName.CyclopsModule2,  "CyclopsModule2"  },
-            { SlotName.CyclopsModule3,  "CyclopsModule3"  },
-            { SlotName.CyclopsModule4,  "CyclopsModule4"  },
-            { SlotName.CyclopsModule5,  "CyclopsModule5"  },
-            { SlotName.CyclopsModule6,  "CyclopsModule6"  },
-            { SlotName.CyclopsModule7,  "CyclopsModule7"  },
-            { SlotName.CyclopsModule8,  "CyclopsModule8"  },
-            { SlotName.CyclopsModule9,  "CyclopsModule9"  },
-            { SlotName.CyclopsModule10, "CyclopsModule10" },
-            { SlotName.CyclopsModule11, "CyclopsModule11" },
-            { SlotName.CyclopsModule12, "CyclopsModule12" },
-            { SlotName.CyclopsModule13, "CyclopsModule13" },
-            { SlotName.CyclopsModule14, "CyclopsModule14" },
         };
 
         public static List<SlotData> NewChipSlots = new List<SlotData>()
@@ -130,28 +114,6 @@ namespace SlotExtender
             new SlotData(slotStringCache[SlotName.ExosuitModule12], SlotConfigID.Slot_12, SlotPos[11], SlotType.CloneNormal)
         };
 
-        public static List<SlotData> SessionCyclopsSlots = new List<SlotData>()
-        {
-            new SlotData(slotStringCache[SlotName.CyclopsModule1], SlotConfigID.Slot_1, SlotPos[0], SlotType.OriginalNormal, "Module1"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule2], SlotConfigID.Slot_2, SlotPos[1], SlotType.OriginalNormal, "Module2"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule3], SlotConfigID.Slot_3, SlotPos[2], SlotType.OriginalNormal, "Module3"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule4], SlotConfigID.Slot_4, SlotPos[3], SlotType.OriginalNormal, "Module4"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule5], SlotConfigID.Slot_5, SlotPos[4], SlotType.OriginalNormal, "Module5"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule6], SlotConfigID.Slot_6, SlotPos[5], SlotType.OriginalNormal, "Module6"),
-        };
-
-        public static readonly List<SlotData> NewCyclopsSlots = new List<SlotData>()
-        {            
-            new SlotData(slotStringCache[SlotName.CyclopsModule7], SlotConfigID.Slot_7, SlotPos[6], SlotType.CloneNormal, "Module7"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule8], SlotConfigID.Slot_8, SlotPos[7], SlotType.CloneNormal, "Module8"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule9], SlotConfigID.Slot_9, ArmSlotPos[0], SlotType.CloneNormal, "Module9"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule10], SlotConfigID.Slot_10, ArmSlotPos[1], SlotType.CloneNormal, "Module10"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule11], SlotConfigID.Slot_11, SlotPos[8], SlotType.CloneNormal, "Module11"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule12], SlotConfigID.Slot_12, SlotPos[9], SlotType.CloneNormal, "Module12"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule13], SlotConfigID.SeamothArmLeft, SlotPos[10], SlotType.CloneNormal, "Module13"),
-            new SlotData(slotStringCache[SlotName.CyclopsModule14], SlotConfigID.SeamothArmRight, SlotPos[11], SlotType.CloneNormal, "Module14")
-        };
-
         public static IEnumerable<string> SessionNewSeamothSlotIDs
         {
             get
@@ -180,27 +142,12 @@ namespace SlotExtender
             }
         }
 
-        public static IEnumerable<string> SessionNewCyclopsSlotIDs
-        {
-            get
-            {
-                foreach (SlotData slotData in SessionCyclopsSlots)
-                {
-                    if (slotData.SlotType == SlotType.CloneNormal)
-                    {
-                        yield return slotData.uGui_SlotName;
-                    }
-                }
-            }
-        }
-
         public static void InitSlotIDs()
         {
             for (int i = 0; i < SEConfig.EXTRASLOTS; i++)
             {
                 SessionSeamothSlots.Add(NewSeamothSlots[i]);
                 SessionExosuitSlots.Add(NewExosuitSlots[i]);
-                SessionCyclopsSlots.Add(NewCyclopsSlots[i]);
             }            
 
             if (SEConfig.isSeamothArmsExists)
@@ -237,12 +184,6 @@ namespace SlotExtender
                 SessionExosuitSlotIDs[i] = SessionExosuitSlots[i].SlotID;
             }
 
-            SessionCyclopsSlotIDs = new string[SessionCyclopsSlots.Count];
-
-            for (int i = 0; i < SessionCyclopsSlotIDs.Length; i++)
-            {
-                SessionCyclopsSlotIDs[i] = SessionCyclopsSlots[i].SlotID;
-            }
         }
 
         public static void ExpandSlotMapping()
@@ -272,14 +213,6 @@ namespace SlotExtender
                 if (slotData.SlotType == SlotType.CloneNormal)
                 {
                     Equipment.slotMapping.Add(slotData.SlotID, EquipmentType.ExosuitModule);
-                }
-            }
-
-            foreach (SlotData slotData in SessionCyclopsSlots)
-            {
-                if (slotData.SlotType == SlotType.CloneNormal)
-                {
-                    Equipment.slotMapping.Add(slotData.uGui_SlotName, EquipmentType.CyclopsModule);
                 }
             }
 

@@ -70,16 +70,9 @@ namespace SlotExtender.Patches
             GameObject ArmLeftSlot = transform.Find("ExosuitArmLeft").gameObject;
             GameObject ArmRightSlot = transform.Find("ExosuitArmRight").gameObject;
             GameObject ChipSlot = transform.Find("Chip1").gameObject;
-            GameObject CyclopsSlot = transform.Find("CyclopsModule2").gameObject;
 
             // processing Player chip slots            
             SlotHelper.NewChipSlots.ForEach(slotData => _processSlot(slotData, ChipSlot, null, null));
-
-            // processing Cyclops slots            
-            SlotHelper.SessionCyclopsSlots.ForEach(slotData => _processSlot(slotData, CyclopsSlot, null, null));
-
-            // repositioning Cyclops background picture
-            transform.Find("CyclopsModule1/Cyclops").localPosition = SlotHelper.VehicleImgPos;
 
             // processing Seamoth slots            
             SlotHelper.SessionSeamothSlots.ForEach(slotData => _processSlot(slotData, NormalModuleSlot, ArmLeftSlot, ArmRightSlot));
