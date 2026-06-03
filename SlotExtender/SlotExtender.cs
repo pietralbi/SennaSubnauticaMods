@@ -4,11 +4,9 @@ using UnityEngine.SceneManagement;
 using HarmonyLib;
 using Common;
 using SlotExtender.Configuration;
-using Nautilus.Options;
 using BepInEx;
 using BepInEx.Logging;
 using System.IO;
-using Nautilus.Handlers;
 
 namespace SlotExtender
 {
@@ -24,7 +22,7 @@ namespace SlotExtender
         internal SlotExtender mInstance;
         internal Harmony hInstance;
 
-        public static SEOptions Options { get; } = OptionsPanelHandler.RegisterModOptions<SEOptions>();
+        public static SEOptions Options => SEOptions.Instance;
 
         internal void Awake()
         {

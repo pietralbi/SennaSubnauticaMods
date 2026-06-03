@@ -17,3 +17,5 @@ dotnet msbuild .\SennaSubnauticaMods.sln /p:Configuration=Debug /p:OutputPath=.\
 ```
 
 To use a different game install, set either the `GameDir` MSBuild property or the `SUBNAUTICA_GAME_DIR` environment variable.
+
+Slot Extender settings are managed through the Nautilus mod options menu.
