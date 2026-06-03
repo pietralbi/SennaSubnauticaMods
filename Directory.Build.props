@@ -1,8 +1,17 @@
 <Project>
     <PropertyGroup>
-        <GameDir>D:\SteamLibrary\steamapps\common\Subnautica</GameDir>
-        <BepInExDir>$(GameDir)\\BepInEx</BepInExDir>
+        <DefaultSubnauticaGameDir>C:\Program Files (x86)\Steam\steamapps\common\Subnautica</DefaultSubnauticaGameDir>
+        <GameDir Condition="'$(GameDir)' == '' and '$(SUBNAUTICA_GAME_DIR)' != ''">$(SUBNAUTICA_GAME_DIR)</GameDir>
+        <GameDir Condition="'$(GameDir)' == ''">$(DefaultSubnauticaGameDir)</GameDir>
+        <BepInExDir Condition="'$(BepInExDir)' == ''">$(GameDir)\BepInEx</BepInExDir>
     </PropertyGroup>
+
+    <Target Name="ValidateSubnauticaDependencies" BeforeTargets="ResolveReferences">
+        <Error Condition="!Exists('$(GameDir)\Subnautica_Data\Managed\Assembly-CSharp.dll')" Text="Subnautica assemblies were not found under '$(GameDir)'. Set the GameDir MSBuild property or SUBNAUTICA_GAME_DIR environment variable to your Subnautica install folder." />
+        <Error Condition="!Exists('$(BepInExDir)\core\BepInEx.dll')" Text="BepInEx.dll was not found under '$(BepInExDir)\core'. Install BepInEx or set BepInExDir to the folder containing your BepInEx install." />
+        <Error Condition="!Exists('$(BepInExDir)\core\0Harmony.dll')" Text="0Harmony.dll was not found under '$(BepInExDir)\core'. Install BepInEx or set BepInExDir to the folder containing your BepInEx install." />
+        <Error Condition="!Exists('$(BepInExDir)\plugins\Nautilus\Nautilus.dll')" Text="Nautilus.dll was not found under '$(BepInExDir)\plugins\Nautilus'. Install Nautilus or set BepInExDir to the folder containing your BepInEx install." />
+    </Target>
 
     <!-- References -->
     <ItemGroup>

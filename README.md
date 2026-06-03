@@ -1,30 +1,19 @@
-# Cheat Manager
-- This mod able to handling the Subnautica built-in console commands on a IMGUI window.
-- This mod include a many new self-made cheat features.
-- This mod include an a debug console window.
-- This console window attached the UnityEngine's "LogCallback" delegate.
-
-# Scanner Module
-- This mod is a Vehicle upgrade module, for simulate a scanner tool if the player within the vehicles.
-
-# Repair Module
-- This mod is a new Vehicle upgrade module, for simulate a repair tool if the player within the vehicles.
-
-# Laser Cannon
-- This mod is a new Seamoth upgrade module, this is the first lethal Seamoth weapon mod.
-
 # Slot Extender
-- This mod is a Vehicle upgrade module slot extender.
-- This mod is add 1-8 extra upgrade slot of the Seamoth and Exosuit.
 
-# Ancient Sword
-- Another weapon mod. The unusable sword in stasis now usable item. (mod using only script for solution)
+Slot Extender is a Subnautica BepInEx plugin that adds configurable extra vehicle upgrade slots for the Seamoth, Exosuit, and Cyclops.
 
-# Quick Slot Extender
-- This mod is a different solution for quick slots extending than RandyKnapp's MoreQuickslots.
-- This mod has capable of colored numbers, configuration UI, SlotExtender compatibility and a costructor patch method.
-- This mod is not publicated on the Nexus.
+## Build
 
-# Cyclops Laser Cannon
-- This mod is the first weapon mod for the cyclops.
-- This mod is using the services of PrimeSonic's More Cyclops Upgrades mod.
+This workspace expects Subnautica, BepInEx, and Nautilus to be installed locally. By default it uses:
+
+```text
+C:\Program Files (x86)\Steam\steamapps\common\Subnautica
+```
+
+To build to a local artifact folder:
+
+```powershell
+dotnet msbuild .\SennaSubnauticaMods.sln /p:Configuration=Debug /p:OutputPath=.\artifacts\SlotExtender\Debug\
+```
+
+To use a different game install, set either the `GameDir` MSBuild property or the `SUBNAUTICA_GAME_DIR` environment variable.
