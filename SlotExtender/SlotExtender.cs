@@ -41,14 +41,6 @@ namespace SlotExtender
             SNLogger.Debug($"Harmony Instance created, Name = [{hInstance.Id}]");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-            // IngameMenuHandler.Main.RegisterOnQuitEvent(OnQuitEvent);
-        }
-
-        private static void OnQuitEvent()
-        {
-            Main.uGUI_PrefixComplete = false;
-            Main.uGUI_PostfixComplete = false;
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -98,8 +90,6 @@ namespace SlotExtender
         internal static bool isConsoleActive;
         internal static bool isKeyBindigsUpdate = false;
 
-        internal static bool uGUI_PrefixComplete = false;
-        internal static bool uGUI_PostfixComplete = false;
         internal static readonly string modFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         internal static Sprite atlasSpriteExosuitArm = null;

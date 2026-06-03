@@ -10,14 +10,19 @@ namespace SlotExtender.Patches
         [HarmonyPrefix]
         public static void Prefix(uGUI_Equipment __instance)
         {
-            if (Main.uGUI_PrefixComplete)
-                return;
-
             Transform transform = __instance.gameObject.transform;
 
             void _setSlotPos(GameObject slot, Vector2 pos)
             {
-                slot.GetComponent<uGUI_EquipmentSlot>().rectTransform.anchoredPosition = pos;
+                uGUI_EquipmentSlot equipmentSlot = slot.GetComponent<uGUI_EquipmentSlot>();
+
+                if (equipmentSlot == null)
+                {
+                    SNLogger.Warn($"Missing uGUI_EquipmentSlot component on '{slot.name}'.");
+                    return;
+                }
+
+                equipmentSlot.rectTransform.anchoredPosition = pos;
             }
 
             void _processSlot(SlotData slotData, GameObject normal, GameObject ArmLeft, GameObject ArmRight)
@@ -49,20 +54,42 @@ namespace SlotExtender.Patches
 
             void _processOriginalSlot(SlotData slotData)
             {
-                GameObject originalSlot = transform.Find(slotData.SlotID).gameObject;
+                Transform originalSlotTransform = transform.Find(slotData.SlotID);
+
+                if (originalSlotTransform == null)
+                {
+                    SNLogger.Warn($"Original slot '{slotData.SlotID}' was not found on uGUI_Equipment instance.");
+                    return;
+                }
+
+                GameObject originalSlot = originalSlotTransform.gameObject;
 
                 _setSlotPos(originalSlot, slotData.SlotPos);                
             }
 
             void _processCloneSlot(SlotData slotData, GameObject prefab)
             {
-                GameObject temp_slot = Object.Instantiate(prefab, transform, false);
+                if (prefab == null)
+                {
+                    SNLogger.Warn($"Cannot create slot '{slotData.SlotID}' because its prefab is missing.");
+                    return;
+                }
+
+                Transform existingSlotTransform = transform.Find(slotData.SlotID);
+                GameObject temp_slot = existingSlotTransform != null
+                    ? existingSlotTransform.gameObject
+                    : Object.Instantiate(prefab, transform, false);
 
                 temp_slot.name = slotData.SlotID;
 
                 _setSlotPos(temp_slot, slotData.SlotPos);
 
-                temp_slot.GetComponent<uGUI_EquipmentSlot>().slot = slotData.uGui_SlotName;           
+                uGUI_EquipmentSlot equipmentSlot = temp_slot.GetComponent<uGUI_EquipmentSlot>();
+
+                if (equipmentSlot != null)
+                {
+                    equipmentSlot.slot = slotData.uGui_SlotName;
+                }
             }
 
             // initializing GameObject variables for cloning
@@ -86,8 +113,6 @@ namespace SlotExtender.Patches
             // repositioning Exosuit background picture
             transform.Find("ExosuitModule1/Exosuit").localPosition = SlotHelper.VehicleImgPos;
 
-            Main.uGUI_PrefixComplete = true;
-
             SNLogger.Log("uGUI_Equipment Slots Patched!");
         }
 
@@ -95,12 +120,7 @@ namespace SlotExtender.Patches
         [HarmonyPostfix]
         public static void Postfix(ref uGUI_Equipment __instance)
         {
-            if (Main.uGUI_PostfixComplete)
-                return;
-
             __instance.gameObject.EnsureComponent<uGUI_SlotTextHandler>();
-
-            Main.uGUI_PostfixComplete = true;
         }
         
     }
