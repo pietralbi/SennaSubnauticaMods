@@ -216,8 +216,7 @@ namespace SlotExtender
                 }
             }
 
-            SNLogger.Log("Equipment slot mapping Patched!");
-
+            SNLogger.Log("Equipment slot mapping patched.");
             DebugEquipmentSlotMapping();
         }
 
