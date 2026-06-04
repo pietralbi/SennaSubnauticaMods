@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(BepInExDir)\plugins\SlotExtender\</OutputPath>
+    <OutputPath>$(BepInExDir)\plugins\Slot Extender\</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +28,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(BepInExDir)\plugins\SlotExtender\</OutputPath>
+    <OutputPath>$(BepInExDir)\plugins\Slot Extender\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -46,6 +46,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigSavePatch.cs" />
+    <Compile Include="Configuration\SEInput.cs" />
     <Compile Include="Configuration\SEOptions.cs" />
     <Compile Include="Configuration\SEConfig.cs" />
     <Compile Include="DataTypes.cs" />

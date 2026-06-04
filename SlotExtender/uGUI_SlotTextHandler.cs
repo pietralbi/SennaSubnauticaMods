@@ -36,7 +36,11 @@ namespace SlotExtender
         {
             foreach (KeyValuePair<string, SlotData> kvp in SlotHelper.ALLSLOTS)
             {
-                ALLSLOTS_Text[kvp.Key].text = kvp.Value.KeyCodeName;
+                if (ALLSLOTS_Text.TryGetValue(kvp.Key, out TextMeshProUGUI slotText))
+                {
+                    slotText.text = kvp.Value.KeyCodeName;
+                    slotText.color = SEConfig.TEXTCOLOR;
+                }
             }
         }
 

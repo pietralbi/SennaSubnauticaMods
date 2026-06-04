@@ -30,6 +30,7 @@ namespace SlotExtender
             BepinLogger = BepInEx.Logging.Logger.CreateLogSource(MODNAME);
             BepinLogger.LogInfo("Awake");
 
+            SEInput.Register();
             SEConfig.Load();
             SlotHelper.InitSlotIDs();
             SlotHelper.ExpandSlotMapping();
@@ -52,6 +53,7 @@ namespace SlotExtender
                 SEConfig.Init();
 
                 // add an action if changed keybindings
+                GameInput.OnBindingsChanged -= Main.GameInput_OnBindingsChanged;
                 GameInput.OnBindingsChanged += Main.GameInput_OnBindingsChanged;
 
                 SlotHelper.InitSessionAllSlots();
@@ -99,9 +101,6 @@ namespace SlotExtender
 
             // updating slot key bindings
             SEConfig.SLOTKEYBINDINGS_Update();
-
-            // synchronizing keybindings to config file
-            SEConfig.SLOTKEYBINDINGS_SyncToAll();
 
             // updating ALLSLOTS dictionary
             SlotHelper.ALLSLOTS_Update();

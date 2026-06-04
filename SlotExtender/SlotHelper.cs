@@ -244,14 +244,14 @@ namespace SlotExtender
             foreach (SlotData slotData in SessionSeamothSlots)
             {
                 SEConfig.SLOTKEYBINDINGS.TryGetValue(slotData.SlotConfigID, out string result);
-                slotData.KeyCodeName = result;
+                slotData.KeyCodeName = result ?? string.Empty;
                 ALLSLOTS.Add(slotData.SlotID, slotData);
             }
 
             foreach (SlotData slotData in SessionExosuitSlots)
             {
                 SEConfig.SLOTKEYBINDINGS.TryGetValue(slotData.SlotConfigID, out string result);
-                slotData.KeyCodeName = result;
+                slotData.KeyCodeName = result ?? string.Empty;
                 ALLSLOTS.Add(slotData.SlotID, slotData);
             }
 
@@ -278,7 +278,7 @@ namespace SlotExtender
             foreach (KeyValuePair<string, SlotData> kvp in ALLSLOTS)
             {
                 SEConfig.SLOTKEYBINDINGS.TryGetValue(kvp.Value.SlotConfigID, out string result);
-                kvp.Value.KeyCodeName = result;                
+                kvp.Value.KeyCodeName = result ?? string.Empty;
             }
         }
 

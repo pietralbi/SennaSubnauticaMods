@@ -100,7 +100,7 @@ namespace SlotExtender
             if (!IsPlayerInVehicle())
                 return; // Player not in any vehicle. Exit method.
 
-            if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Upgrade"]))
+            if (GameInput.GetButtonDown(SEInput.Upgrade))
             {
                 if (PdaMain.isOpen)
                 {
@@ -113,7 +113,7 @@ namespace SlotExtender
                     return;
                 }
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Storage"]))
+            else if (GameInput.GetButtonDown(SEInput.Storage))
             {
                 if (ThisVehicle.GetType() != typeof(Exosuit))
                     return;
@@ -153,49 +153,39 @@ namespace SlotExtender
                 TryUseSlotItem(4);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_6"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot6))
             {
                 TryUseSlotItem(5);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_7"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot7))
             {
                 TryUseSlotItem(6);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_8"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot8))
             {
                 TryUseSlotItem(7);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_9"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot9))
             {
                 TryUseSlotItem(8);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_10"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot10))
             {
                 TryUseSlotItem(9);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_11"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot11))
             {
                 TryUseSlotItem(10);
                 return;
             }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS["Slot_12"]))
+            else if (GameInput.GetButtonDown(SEInput.Slot12))
             {
                 TryUseSlotItem(11);
-                return;
-            }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS[SlotHelper.slotStringCache[SlotName.SeamothArmLeft]]))
-            {
-                TryUseSeamothArm(SlotHelper.slotStringCache[SlotName.SeamothArmLeft]);
-                return;
-            }
-            else if (Input.GetKeyDown(SEConfig.KEYBINDINGS[SlotHelper.slotStringCache[SlotName.SeamothArmRight]]))
-            {
-                TryUseSeamothArm(SlotHelper.slotStringCache[SlotName.SeamothArmRight]);
                 return;
             }
         }        
@@ -230,14 +220,6 @@ namespace SlotExtender
             if (slotID > 5)
             {
                 ThisVehicle.SendMessage("SlotKeyDown", slotID);
-            }
-        }
-
-        public void TryUseSeamothArm(string seamothArmID)
-        {
-            if (ThisVehicle.GetType() == typeof(SeaMoth))
-            {
-                ThisVehicle.SlotKeyDown(ThisVehicle.GetSlotIndex(seamothArmID));
             }
         }
 

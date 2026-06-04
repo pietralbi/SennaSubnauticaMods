@@ -11,10 +11,8 @@ namespace SlotExtender.Configuration
         public static string PROGRAM_VERSION = "1.0.0";
         public static string CONFIG_VERSION = PROGRAM_VERSION;
 
-        public static Dictionary<string, string> Section_Hotkeys;
         public static Dictionary<string, string> Section_Settings;
         public static Dictionary<SlotConfigID, string> SLOTKEYBINDINGS = new Dictionary<SlotConfigID, string>();
-        public static Dictionary<string, KeyCode> KEYBINDINGS;
 
         public static List<string> SLOTKEYSLIST = new List<string>();
 
@@ -27,25 +25,24 @@ namespace SlotExtender.Configuration
 
         internal static void SLOTKEYBINDINGS_Update()
         {
+            SEInput.Register();
             EnsureRuntimeConfig();
 
             SLOTKEYBINDINGS.Clear();
             SLOTKEYSLIST.Clear();
 
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_1, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot1, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_2, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot2, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_3, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot3, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_4, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot4, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_5, GameInput.GetBinding(GameInput.Device.Keyboard, GameInput.Button.Slot5, GameInput.BindingSet.Primary));
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_6, Section_Hotkeys[SlotConfigID.Slot_6.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_7, Section_Hotkeys[SlotConfigID.Slot_7.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_8, Section_Hotkeys[SlotConfigID.Slot_8.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_9, Section_Hotkeys[SlotConfigID.Slot_9.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_10, Section_Hotkeys[SlotConfigID.Slot_10.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_11, Section_Hotkeys[SlotConfigID.Slot_11.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_12, Section_Hotkeys[SlotConfigID.Slot_12.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.SeamothArmLeft, Section_Hotkeys[SlotConfigID.SeamothArmLeft.ToString()]);
-            SLOTKEYBINDINGS.Add(SlotConfigID.SeamothArmRight, Section_Hotkeys[SlotConfigID.SeamothArmRight.ToString()]);
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_1, GetGameInputBindingDisplay(GameInput.Button.Slot1));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_2, GetGameInputBindingDisplay(GameInput.Button.Slot2));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_3, GetGameInputBindingDisplay(GameInput.Button.Slot3));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_4, GetGameInputBindingDisplay(GameInput.Button.Slot4));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_5, GetGameInputBindingDisplay(GameInput.Button.Slot5));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_6, GetGameInputBindingDisplay(SEInput.Slot6));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_7, GetGameInputBindingDisplay(SEInput.Slot7));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_8, GetGameInputBindingDisplay(SEInput.Slot8));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_9, GetGameInputBindingDisplay(SEInput.Slot9));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_10, GetGameInputBindingDisplay(SEInput.Slot10));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_11, GetGameInputBindingDisplay(SEInput.Slot11));
+            SLOTKEYBINDINGS.Add(SlotConfigID.Slot_12, GetGameInputBindingDisplay(SEInput.Slot12));
 
             foreach (KeyValuePair<SlotConfigID, string> kvp in SLOTKEYBINDINGS)
             {
@@ -56,6 +53,7 @@ namespace SlotExtender.Configuration
         internal static void Load()
         {
             SEOptions.Instance.Load();
+
             ApplyOptions(SEOptions.Instance);
 
             SNLogger.Log("Nautilus configuration loaded.");
@@ -67,8 +65,6 @@ namespace SlotExtender.Configuration
 
             SLOTKEYBINDINGS_Update();
 
-            SLOTKEYBINDINGS_SyncToAll();
-
             SNLogger.Log("Configuration initialized.");
         }
 
@@ -77,33 +73,35 @@ namespace SlotExtender.Configuration
             SEOptions.Instance.Save();
         }
 
-        internal static void SLOTKEYBINDINGS_SyncToAll()
+        internal static void ApplyRuntimeOptions(SEOptions options)
         {
-            EnsureRuntimeConfig();
-
-            foreach (KeyValuePair<SlotConfigID, string> kvp in SLOTKEYBINDINGS)
+            if (options == null)
             {
-                SNLogger.Debug($"key: {kvp.Key.ToString()}, Value: {kvp.Value}");
-
-                string key = kvp.Key.ToString();
-
-                if (Section_Hotkeys.ContainsKey(key))
-                {
-                    Section_Hotkeys[key] = kvp.Value;
-                }
-
-                KEYBINDINGS[key] = InputHelper.GetInputNameAsKeyCode(kvp.Value);
+                return;
             }
-        }
 
-        internal static void KEYBINDINGS_Set()
-        {
-            EnsureRuntimeConfig();
+            if (Section_Settings == null)
+            {
+                Section_Settings = new Dictionary<string, string>();
+            }
+
+            Section_Settings["TextColor"] = options.TextColor;
+            TEXTCOLOR = ColorHelper.GetColor(options.TextColor);
+
+            SLOTKEYBINDINGS_Update();
+            SlotHelper.ALLSLOTS_Update();
+
+            if (uGUI_SlotTextHandler.Instance != null)
+            {
+                uGUI_SlotTextHandler.Instance.UpdateSlotText();
+            }
+
+            SNLogger.Log("Runtime configuration updated from Nautilus options.");
         }
 
         private static void EnsureRuntimeConfig()
         {
-            if (Section_Settings == null || Section_Hotkeys == null || KEYBINDINGS == null)
+            if (Section_Settings == null)
             {
                 ApplyOptions(SEOptions.Instance);
             }
@@ -111,28 +109,7 @@ namespace SlotExtender.Configuration
 
         private static void ApplyOptions(SEOptions options)
         {
-            Section_Settings = new Dictionary<string, string>
-            {
-                { "MaxSlots", options.MaxSlots.ToString() },
-                { "TextColor", options.TextColor },
-                { "SeamothStorageSlotsOffset", options.SeamothStorageSlotsOffset.ToString() },
-                { "SlotLayout", options.SlotLayout }
-            };
-
-            Section_Hotkeys = new Dictionary<string, string>
-            {
-                { "Upgrade", InputHelper.GetKeyCodeAsInputName(options.Upgrade) },
-                { "Storage", InputHelper.GetKeyCodeAsInputName(options.Storage) },
-                { SlotConfigID.Slot_6.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_6) },
-                { SlotConfigID.Slot_7.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_7) },
-                { SlotConfigID.Slot_8.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_8) },
-                { SlotConfigID.Slot_9.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_9) },
-                { SlotConfigID.Slot_10.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_10) },
-                { SlotConfigID.Slot_11.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_11) },
-                { SlotConfigID.Slot_12.ToString(), InputHelper.GetKeyCodeAsInputName(options.Slot_12) },
-                { SlotConfigID.SeamothArmLeft.ToString(), InputHelper.GetKeyCodeAsInputName(options.SeamothArmLeft) },
-                { SlotConfigID.SeamothArmRight.ToString(), InputHelper.GetKeyCodeAsInputName(options.SeamothArmRight) }
-            };
+            Section_Settings = CreateSettingsSection(options);
 
             MAXSLOTS = options.MaxSlots < 5 || options.MaxSlots > 12 ? 12 : options.MaxSlots;
             EXTRASLOTS = MAXSLOTS - 4;
@@ -147,13 +124,45 @@ namespace SlotExtender.Configuration
                 : SlotLayout.Grid;
 
             isSeamothArmsExists = true;
+        }
 
-            KEYBINDINGS = new Dictionary<string, KeyCode>();
-
-            foreach (KeyValuePair<string, string> kvp in Section_Hotkeys)
+        private static Dictionary<string, string> CreateSettingsSection(SEOptions options)
+        {
+            return new Dictionary<string, string>
             {
-                KEYBINDINGS[kvp.Key] = InputHelper.GetInputNameAsKeyCode(kvp.Value);
+                { "MaxSlots", options.MaxSlots.ToString() },
+                { "TextColor", options.TextColor },
+                { "SeamothStorageSlotsOffset", options.SeamothStorageSlotsOffset.ToString() },
+                { "SlotLayout", options.SlotLayout }
+            };
+        }
+
+        private static string GetGameInputBindingDisplay(GameInput.Button button)
+        {
+            string binding = GameInput.GetBinding(GameInput.Device.Keyboard, button, GameInput.BindingSet.Primary);
+
+            if (string.IsNullOrEmpty(binding))
+            {
+                return string.Empty;
             }
+
+            int pathSeparatorIndex = binding.LastIndexOf('/');
+
+            if (pathSeparatorIndex >= 0 && pathSeparatorIndex + 1 < binding.Length)
+            {
+                binding = binding.Substring(pathSeparatorIndex + 1);
+            }
+
+            if (binding.StartsWith("digit", StringComparison.OrdinalIgnoreCase))
+            {
+                binding = binding.Substring("digit".Length);
+            }
+            else if (binding.StartsWith("numpad", StringComparison.OrdinalIgnoreCase))
+            {
+                binding = "Num" + binding.Substring("numpad".Length);
+            }
+
+            return binding.Length == 1 ? binding.ToUpperInvariant() : binding;
         }
     }
 }
