@@ -3,11 +3,6 @@ using UnityEngine;
 
 namespace SlotExtender
 {
-    public enum ModdedEquipmentType
-    {
-        SeamothArm = 100
-    };
-
     public enum SlotLayout
     {
         Grid,
@@ -20,8 +15,6 @@ namespace SlotExtender
         OriginalArmLeft,
         OriginalArmRight,
         CloneNormal,
-        CloneArmLeft,
-        CloneArmRight,
         Chip,
         CloneChip
     };
@@ -42,9 +35,7 @@ namespace SlotExtender
         Slot_9,
         Slot_10,
         Slot_11,
-        Slot_12,
-        SeamothArmLeft,
-        SeamothArmRight
+        Slot_12
     };
 
     public enum SlotName
@@ -81,8 +72,6 @@ namespace SlotExtender
         SeamothModule10,
         SeamothModule11,
         SeamothModule12,
-        SeamothArmLeft,
-        SeamothArmRight,
     };
 
     public class SlotData

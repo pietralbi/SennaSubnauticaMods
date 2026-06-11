@@ -18,10 +18,12 @@ namespace SlotExtender.Configuration
 
         public static int MAXSLOTS;
         public static int EXTRASLOTS;
+        public static int PLAYER_EXTRA_CHIP_SLOTS;
+        public static int SEAMOTH_EXTRA_SLOTS;
+        public static int EXOSUIT_EXTRA_SLOTS;
         public static Color TEXTCOLOR;
         public static int STORAGE_SLOTS_OFFSET = 4;
         public static SlotLayout SLOT_LAYOUT = SlotLayout.Grid;
-        public static bool isSeamothArmsExists = false;
 
         internal static void SLOTKEYBINDINGS_Update()
         {
@@ -111,7 +113,11 @@ namespace SlotExtender.Configuration
         {
             Section_Settings = CreateSettingsSection(options);
 
-            MAXSLOTS = options.MaxSlots < 5 || options.MaxSlots > 12 ? 12 : options.MaxSlots;
+            PLAYER_EXTRA_CHIP_SLOTS = Clamp(options.PlayerExtraChipSlots, 0, 2);
+            SEAMOTH_EXTRA_SLOTS = Clamp(options.SeamothExtraModuleSlots, 0, 8);
+            EXOSUIT_EXTRA_SLOTS = Clamp(options.PrawnExtraModuleSlots, 0, 8);
+
+            MAXSLOTS = 4 + Math.Max(SEAMOTH_EXTRA_SLOTS, EXOSUIT_EXTRA_SLOTS);
             EXTRASLOTS = MAXSLOTS - 4;
 
             TEXTCOLOR = ColorHelper.GetColor(options.TextColor);
@@ -122,19 +128,34 @@ namespace SlotExtender.Configuration
             SLOT_LAYOUT = string.Equals(options.SlotLayout, SlotLayout.Circle.ToString(), StringComparison.OrdinalIgnoreCase)
                 ? SlotLayout.Circle
                 : SlotLayout.Grid;
-
-            isSeamothArmsExists = true;
         }
 
         private static Dictionary<string, string> CreateSettingsSection(SEOptions options)
         {
             return new Dictionary<string, string>
             {
-                { "MaxSlots", options.MaxSlots.ToString() },
+                { "PlayerExtraChipSlots", options.PlayerExtraChipSlots.ToString() },
+                { "SeamothExtraModuleSlots", options.SeamothExtraModuleSlots.ToString() },
+                { "PrawnExtraModuleSlots", options.PrawnExtraModuleSlots.ToString() },
                 { "TextColor", options.TextColor },
                 { "SeamothStorageSlotsOffset", options.SeamothStorageSlotsOffset.ToString() },
                 { "SlotLayout", options.SlotLayout }
             };
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            if (value < min)
+            {
+                return min;
+            }
+
+            if (value > max)
+            {
+                return max;
+            }
+
+            return value;
         }
 
         private static string GetGameInputBindingDisplay(GameInput.Button button)

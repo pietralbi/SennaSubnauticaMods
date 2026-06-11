@@ -60,8 +60,6 @@ namespace SlotExtender
             { SlotName.SeamothModule10, "SeamothModule10" },
             { SlotName.SeamothModule11, "SeamothModule11" },
             { SlotName.SeamothModule12, "SeamothModule12" },
-            { SlotName.SeamothArmLeft,  "SeamothArmLeft"  },
-            { SlotName.SeamothArmRight, "SeamothArmRight" },
         };
 
         public static List<SlotData> NewChipSlots = new List<SlotData>()
@@ -70,13 +68,9 @@ namespace SlotExtender
             new SlotData(slotStringCache[SlotName.Chip4], SlotConfigID.Chip, ChipSlotPos[1], SlotType.CloneChip),
         };
 
-        public static List<SlotData> SessionSeamothSlots = new List<SlotData>()
-        {
-            new SlotData(slotStringCache[SlotName.SeamothModule1], SlotConfigID.Slot_1, SlotPos[0], SlotType.OriginalNormal),
-            new SlotData(slotStringCache[SlotName.SeamothModule2], SlotConfigID.Slot_2, SlotPos[1], SlotType.OriginalNormal),
-            new SlotData(slotStringCache[SlotName.SeamothModule3], SlotConfigID.Slot_3, SlotPos[2], SlotType.OriginalNormal),
-            new SlotData(slotStringCache[SlotName.SeamothModule4], SlotConfigID.Slot_4, SlotPos[3], SlotType.OriginalNormal),
-        };
+        public static List<SlotData> SessionNewChipSlots = new List<SlotData>();
+
+        public static List<SlotData> SessionSeamothSlots = CreateBaseSeamothSlots();
 
         public static readonly List<SlotData> NewSeamothSlots = new List<SlotData>()
         {
@@ -87,20 +81,10 @@ namespace SlotExtender
             new SlotData(slotStringCache[SlotName.SeamothModule9], SlotConfigID.Slot_9, SlotPos[8], SlotType.CloneNormal),
             new SlotData(slotStringCache[SlotName.SeamothModule10], SlotConfigID.Slot_10, SlotPos[9], SlotType.CloneNormal),
             new SlotData(slotStringCache[SlotName.SeamothModule11], SlotConfigID.Slot_11, SlotPos[10], SlotType.CloneNormal),
-            new SlotData(slotStringCache[SlotName.SeamothModule12], SlotConfigID.Slot_12, SlotPos[11], SlotType.CloneNormal),
-            new SlotData(slotStringCache[SlotName.SeamothArmLeft], SlotConfigID.SeamothArmLeft, ArmSlotPos[0], SlotType.CloneArmLeft),
-            new SlotData(slotStringCache[SlotName.SeamothArmRight], SlotConfigID.SeamothArmRight, ArmSlotPos[1], SlotType.CloneArmRight)
+            new SlotData(slotStringCache[SlotName.SeamothModule12], SlotConfigID.Slot_12, SlotPos[11], SlotType.CloneNormal)
         };
 
-        public static List<SlotData> SessionExosuitSlots = new List<SlotData>()
-        {
-            new SlotData(slotStringCache[SlotName.ExosuitArmLeft], SlotConfigID.ExosuitArmLeft, ArmSlotPos[0], SlotType.OriginalArmLeft),
-            new SlotData(slotStringCache[SlotName.ExosuitArmRight], SlotConfigID.ExosuitArmRight, ArmSlotPos[1], SlotType.OriginalArmRight),
-            new SlotData(slotStringCache[SlotName.ExosuitModule1], SlotConfigID.Slot_1, SlotPos[0], SlotType.OriginalNormal),
-            new SlotData(slotStringCache[SlotName.ExosuitModule2], SlotConfigID.Slot_2, SlotPos[1], SlotType.OriginalNormal),
-            new SlotData(slotStringCache[SlotName.ExosuitModule3], SlotConfigID.Slot_3, SlotPos[2], SlotType.OriginalNormal),
-            new SlotData(slotStringCache[SlotName.ExosuitModule4], SlotConfigID.Slot_4, SlotPos[3], SlotType.OriginalNormal)
-        };
+        public static List<SlotData> SessionExosuitSlots = CreateBaseExosuitSlots();
 
         public static readonly List<SlotData> NewExosuitSlots = new List<SlotData>()
         {
@@ -113,6 +97,30 @@ namespace SlotExtender
             new SlotData(slotStringCache[SlotName.ExosuitModule11], SlotConfigID.Slot_11, SlotPos[10], SlotType.CloneNormal),
             new SlotData(slotStringCache[SlotName.ExosuitModule12], SlotConfigID.Slot_12, SlotPos[11], SlotType.CloneNormal)
         };
+
+        private static List<SlotData> CreateBaseSeamothSlots()
+        {
+            return new List<SlotData>()
+            {
+                new SlotData(slotStringCache[SlotName.SeamothModule1], SlotConfigID.Slot_1, SlotPos[0], SlotType.OriginalNormal),
+                new SlotData(slotStringCache[SlotName.SeamothModule2], SlotConfigID.Slot_2, SlotPos[1], SlotType.OriginalNormal),
+                new SlotData(slotStringCache[SlotName.SeamothModule3], SlotConfigID.Slot_3, SlotPos[2], SlotType.OriginalNormal),
+                new SlotData(slotStringCache[SlotName.SeamothModule4], SlotConfigID.Slot_4, SlotPos[3], SlotType.OriginalNormal),
+            };
+        }
+
+        private static List<SlotData> CreateBaseExosuitSlots()
+        {
+            return new List<SlotData>()
+            {
+                new SlotData(slotStringCache[SlotName.ExosuitArmLeft], SlotConfigID.ExosuitArmLeft, ArmSlotPos[0], SlotType.OriginalArmLeft),
+                new SlotData(slotStringCache[SlotName.ExosuitArmRight], SlotConfigID.ExosuitArmRight, ArmSlotPos[1], SlotType.OriginalArmRight),
+                new SlotData(slotStringCache[SlotName.ExosuitModule1], SlotConfigID.Slot_1, SlotPos[0], SlotType.OriginalNormal),
+                new SlotData(slotStringCache[SlotName.ExosuitModule2], SlotConfigID.Slot_2, SlotPos[1], SlotType.OriginalNormal),
+                new SlotData(slotStringCache[SlotName.ExosuitModule3], SlotConfigID.Slot_3, SlotPos[2], SlotType.OriginalNormal),
+                new SlotData(slotStringCache[SlotName.ExosuitModule4], SlotConfigID.Slot_4, SlotPos[3], SlotType.OriginalNormal)
+            };
+        }
 
         public static IEnumerable<string> SessionNewSeamothSlotIDs
         {
@@ -144,30 +152,30 @@ namespace SlotExtender
 
         public static void InitSlotIDs()
         {
-            for (int i = 0; i < SEConfig.EXTRASLOTS; i++)
-            {
-                SessionSeamothSlots.Add(NewSeamothSlots[i]);
-                SessionExosuitSlots.Add(NewExosuitSlots[i]);
-            }            
+            SessionNewChipSlots.Clear();
+            SessionSeamothSlots = CreateBaseSeamothSlots();
+            SessionExosuitSlots = CreateBaseExosuitSlots();
 
-            if (SEConfig.isSeamothArmsExists)
+            for (int i = 0; i < SEConfig.PLAYER_EXTRA_CHIP_SLOTS; i++)
             {
-                foreach (SlotData slotData in NewSeamothSlots)
-                {
-                    SlotType slotType = slotData.SlotType;
-
-                    if (slotType == SlotType.CloneArmLeft || slotType == SlotType.CloneArmRight)
-                    {
-                        SessionSeamothSlots.Add(slotData);
-                    }
-                }
+                SessionNewChipSlots.Add(NewChipSlots[i]);
             }
 
-            NewChipSlotIDs = new string[NewChipSlots.Count];
+            for (int i = 0; i < SEConfig.SEAMOTH_EXTRA_SLOTS; i++)
+            {
+                SessionSeamothSlots.Add(NewSeamothSlots[i]);
+            }
+
+            for (int i = 0; i < SEConfig.EXOSUIT_EXTRA_SLOTS; i++)
+            {
+                SessionExosuitSlots.Add(NewExosuitSlots[i]);
+            }
+
+            NewChipSlotIDs = new string[SessionNewChipSlots.Count];
 
             for (int i = 0; i < NewChipSlotIDs.Length; i++)
             {
-                NewChipSlotIDs[i] = NewChipSlots[i].SlotID;
+                NewChipSlotIDs[i] = SessionNewChipSlots[i].SlotID;
             }
             
             SessionSeamothSlotIDs = new string[SessionSeamothSlots.Count];
@@ -188,7 +196,7 @@ namespace SlotExtender
 
         public static void ExpandSlotMapping()
         {
-            foreach (SlotData slotData in NewChipSlots)
+            foreach (SlotData slotData in SessionNewChipSlots)
             {
                 Equipment.slotMapping.Add(slotData.SlotID, EquipmentType.Chip);
             }
@@ -199,11 +207,6 @@ namespace SlotExtender
                 {
                     case SlotType.CloneNormal:
                         Equipment.slotMapping.Add(slotData.SlotID, EquipmentType.SeamothModule);
-                        break;
-
-                    case SlotType.CloneArmLeft:
-                    case SlotType.CloneArmRight:
-                        Equipment.slotMapping.Add(slotData.SlotID, (EquipmentType)ModdedEquipmentType.SeamothArm);
                         break;
                 }
             }
@@ -229,11 +232,6 @@ namespace SlotExtender
             }           
 
             return false;
-        }
-
-        public static bool IsSeamothArmSlot(string slotName)
-        {
-            return slotName.Equals("SeamothArmLeft") || slotName.Equals("SeamothArmRight") ? true : false;
         }
 
         public static void InitSessionAllSlots()

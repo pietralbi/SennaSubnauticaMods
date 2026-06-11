@@ -25,7 +25,7 @@ namespace SlotExtender.Patches
                 equipmentSlot.rectTransform.anchoredPosition = pos;
             }
 
-            void _processSlot(SlotData slotData, GameObject normal, GameObject ArmLeft, GameObject ArmRight)
+            void _processSlot(SlotData slotData, GameObject normal)
             {
                 switch (slotData.SlotType)
                 {
@@ -40,14 +40,6 @@ namespace SlotExtender.Patches
 
                     case SlotType.CloneNormal:
                         _processCloneSlot(slotData, normal);
-                        break;
-
-                    case SlotType.CloneArmLeft:
-                        _processCloneSlot(slotData, ArmLeft);
-                        break;
-
-                    case SlotType.CloneArmRight:
-                        _processCloneSlot(slotData, ArmRight);
                         break;
                 }
             }
@@ -94,21 +86,19 @@ namespace SlotExtender.Patches
 
             // initializing GameObject variables for cloning
             GameObject NormalModuleSlot = transform.Find("SeamothModule2").gameObject;
-            GameObject ArmLeftSlot = transform.Find("ExosuitArmLeft").gameObject;
-            GameObject ArmRightSlot = transform.Find("ExosuitArmRight").gameObject;
             GameObject ChipSlot = transform.Find("Chip1").gameObject;
 
             // processing Player chip slots            
-            SlotHelper.NewChipSlots.ForEach(slotData => _processSlot(slotData, ChipSlot, null, null));
+            SlotHelper.SessionNewChipSlots.ForEach(slotData => _processSlot(slotData, ChipSlot));
 
             // processing Seamoth slots            
-            SlotHelper.SessionSeamothSlots.ForEach(slotData => _processSlot(slotData, NormalModuleSlot, ArmLeftSlot, ArmRightSlot));
+            SlotHelper.SessionSeamothSlots.ForEach(slotData => _processSlot(slotData, NormalModuleSlot));
 
             // repositioning Seamoth background picture
             transform.Find("SeamothModule1/Seamoth").localPosition = SlotHelper.VehicleImgPos;
 
             // processing Exosuit slots
-            SlotHelper.SessionExosuitSlots.ForEach(slotData => _processSlot(slotData, NormalModuleSlot, ArmLeftSlot, ArmRightSlot));
+            SlotHelper.SessionExosuitSlots.ForEach(slotData => _processSlot(slotData, NormalModuleSlot));
 
             // repositioning Exosuit background picture
             transform.Find("ExosuitModule1/Exosuit").localPosition = SlotHelper.VehicleImgPos;
