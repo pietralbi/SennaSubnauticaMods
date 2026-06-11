@@ -53,6 +53,7 @@
     <Compile Include="DataTypes.cs" />
     <Compile Include="InputFieldListener.cs" />
     <Compile Include="Patches\DevConsole_Patch.cs" />
+    <Compile Include="Patches\CrushDamage_Patch.cs" />
     <Compile Include="Patches\Inventory_Patch.cs" />
     <Compile Include="Patches\uGUI_Equipment_Patch.cs" />
     <Compile Include="Patches\Equipment_Patch.cs" />
