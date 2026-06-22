@@ -216,6 +216,23 @@ namespace SlotExtender
                     return;
                 }
             }
+            else if (ThisVehicle.GetType() == typeof(Exosuit))
+            {
+                Exosuit exosuit = ThisVehicle.GetComponent<Exosuit>();
+                int moduleSlotID = slotID + 2;
+
+                if (exosuit != null && exosuit.GetSlotBinding(moduleSlotID) == TechType.VehicleStorageModule)
+                {
+                    exosuit.storageContainer.Open();
+                    return;
+                }
+
+                if (slotID > 3)
+                {
+                    ThisVehicle.SendMessage("SlotKeyDown", slotID);
+                    return;
+                }
+            }
 
             if (slotID > 5)
             {

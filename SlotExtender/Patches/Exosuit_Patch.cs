@@ -24,4 +24,25 @@ namespace SlotExtender.Patches
             SNLogger.Debug($"Component added in Exosuit.Awake -> Postfix Patch. ID: {__instance.GetInstanceID()}");           
         }
     }
+
+    [HarmonyPatch(typeof(Exosuit), "IsAllowedToRemove")]
+    internal static class Exosuit_IsAllowedToRemove_Patch
+    {
+        [HarmonyPrefix]
+        internal static bool Prefix(Exosuit __instance, Pickupable pickupable, ref bool __result)
+        {
+            if (pickupable == null || pickupable.GetTechType() != TechType.VehicleStorageModule || __instance.storageContainer == null)
+            {
+                return true;
+            }
+
+            if (__instance.storageContainer.IsEmpty())
+            {
+                __result = true;
+                return false;
+            }
+
+            return true;
+        }
+    }
 }
